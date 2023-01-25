@@ -5,12 +5,12 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Persistencia;
+using Persistencia.Contex;
 
 #nullable disable
 
 namespace Persistencia.Migrations
-{
+    {
     [DbContext(typeof(LoginContext))]
     [Migration("20230124012057_FirstMigration")]
     partial class FirstMigration

@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aplicacion.DTO
+namespace Dominio.ModelsDTO
     {
     public class UsuariosDTO
         {
-
         public string? Email { get; set; }
         public string? UserName { get; set; }
-
         public string? Password { get; set; }
+        public string? Tokent { get; set; }
+        public string? Imagen { get; set; }
 
 
         }

@@ -4,7 +4,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Persistencia;
 using System;
 using System.Reflection;
 using WebAPI.Midleware;
@@ -14,9 +13,12 @@ using Aplicacion.Seguridad;
 using NLog.Web;
 using NLog;
 using Dominio.Models;
-
-
-
+using AutoMapper;
+using Aplicacion.MappingProfile;
+using Aplicacion.Contratos;
+using Seguridad.TokenSeguridad;
+using Persistencia.Contex;
+using Persistencia.Datos;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -36,11 +38,7 @@ try
 
     builder.Services.AddIdentityCore<Usuarios>();
 
-
-
     DotNetEnv.Env.Load();
-
-
 
     builder.Services.AddSwaggerGen();
 
@@ -50,15 +48,17 @@ try
                            options.UseSqlServer(connectionstring),
                 ServiceLifetime.Transient);
 
-
-
-
-
+    //builder.Services.AddControllers().AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblies());
     var builder_2 = builder.Services.AddIdentityCore<Usuarios>();
     var identitybuilder = new IdentityBuilder(builder_2.UserType, builder.Services);
     identitybuilder.AddEntityFrameworkStores<LoginContext>();
     identitybuilder.AddSignInManager<SignInManager<Usuarios>>();
     builder.Services.TryAddSingleton<ISystemClock, SystemClock>();
+
+    builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+    builder.Services.AddAutoMapper(typeof(MappingProfile).Assembly);
+    builder.Services.AddScoped<IJWTgenerador, JWTgenerador>();
+
 
 
     builder.Services.AddCors(options =>
@@ -96,8 +96,10 @@ try
 
             try
                 {
+                var userManager = services.GetRequiredService<UserManager<Usuarios>>();
                 var context = services.GetRequiredService<LoginContext>();
-                context.Database.Migrate();
+                await context.Database.MigrateAsync();
+                await DataPrueba.InsertDada(context, userManager);
                 }
             catch (Exception e)
                 {

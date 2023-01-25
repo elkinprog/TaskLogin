@@ -9,11 +9,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Dominio.Models;
 
-namespace Persistencia
+
+namespace Persistencia.Contex
     {
 
-    public class LoginContext: IdentityDbContext<Usuarios>
-    {
+    public class LoginContext : IdentityDbContext<Usuarios>
+        {
 
         public LoginContext(DbContextOptions options) : base(options) { }
 
@@ -22,9 +23,9 @@ namespace Persistencia
             }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
             {
-                base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
             }
-            public DbSet<Usuarios>? Usuarios { get; set; }
+        public DbSet<Usuarios>? Usuarios { get; set; }
 
         }
-}
+    }

@@ -11,7 +11,8 @@ namespace Dominio.Models
     {
     public class Usuarios : IdentityUser
         {
-        public string? NombreCompleto { get; set; }
+
+        public string Nombre { get; set; }
 
         }
     }
